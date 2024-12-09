@@ -3,11 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <title>Hello World!</title>
-
   </head>
+
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
-    <script type="module" src="/src/renderer.ts"></script>
+    <button id="button1">View 1</button>
+    <button id="button2">View 2</button>
+
+    <script>
+      const button1 = document.querySelector("#button1");
+      button1.addEventListener("click", () => {
+        window.electronAPI.setActiveView("view1");
+      });
+
+      const button2 = document.querySelector("#button2");
+      button2.addEventListener("click", () => {
+        window.electronAPI.setActiveView("view2");
+      });
+    </script>
   </body>
 </html>
