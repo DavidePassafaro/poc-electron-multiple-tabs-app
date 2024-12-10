@@ -1,31 +1,55 @@
-/**
- * This file will automatically be loaded by vite and run in the "renderer" context.
- * To learn more about the differences between the "main" and the "renderer" context in
- * Electron, visit:
- *
- * https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes
- *
- * By default, Node.js integration in this file is disabled. When enabling Node.js integration
- * in a renderer process, please be aware of potential security implications. You can read
- * more about security risks here:
- *
- * https://electronjs.org/docs/tutorial/security
- *
- * To enable Node.js integration in this file, open up `main.ts` and enable the `nodeIntegration`
- * flag:
- *
- * ```
- *  // Create the browser window.
- *  mainWindow = new BrowserWindow({
- *    width: 800,
- *    height: 600,
- *    webPreferences: {
- *      nodeIntegration: true
- *    }
- *  });
- * ```
- */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface Window {
+  electronAPI: {
+    setActiveView: (viewIndex: number) => void;
+    createNewView: (url?: string) => void;
+    performWindowAction: (action: "close" | "minimize" | "maximize") => void;
 
-import './index.css';
+    onTitleChange: (callback: CallableFunction) => void;
+    onNewViewCreated: (callback: CallableFunction) => void;
+  };
+}
 
-console.log('👋 This message is being logged by "renderer.ts", included via Vite');
+if (window.electronAPI) {
+  const buttonClose = document.querySelector("#button-close");
+  buttonClose.addEventListener("click", () => {
+    window.electronAPI.performWindowAction("close");
+  });
+
+  const buttonMinimize = document.querySelector("#button-minimize");
+  buttonMinimize.addEventListener("click", () => {
+    window.electronAPI.performWindowAction("minimize");
+  });
+
+  const buttonMaximize = document.querySelector("#button-maximize");
+  buttonMaximize.addEventListener("click", () => {
+    window.electronAPI.performWindowAction("maximize");
+  });
+
+  const buttonPlus = document.querySelector("#button-plus");
+  buttonPlus.addEventListener("click", () => {
+    window.electronAPI.createNewView();
+  });
+
+  window.electronAPI.onTitleChange((viewIndex: string, title: string) => {
+    const button = document.querySelector(`#button-${viewIndex}`);
+    if (button) {
+      button.textContent = title;
+    }
+  });
+
+  window.electronAPI.onNewViewCreated((title?: string) => {
+    const tabsContainer = document.querySelector("#tabs-container");
+    const buttonElement = document.createElement("button");
+    const buttonIndex = tabsContainer.children.length + 1;
+
+    buttonElement.textContent = title || "Loading...";
+    buttonElement.id = `button-${buttonIndex}`;
+
+    buttonElement.addEventListener("click", () => {
+      window.electronAPI.setActiveView(buttonIndex);
+    });
+
+    tabsContainer.appendChild(buttonElement);
+  });
+}

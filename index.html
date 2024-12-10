@@ -3,22 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <title>Hello World!</title>
+    <link type="text/css" rel="stylesheet" href="src/index.css" />
   </head>
 
   <body>
-    <button id="button1">View 1</button>
-    <button id="button2">View 2</button>
+    <div class="window-actions-container">
+      <button id="button-close" style="background-color: red">x</button>
+      <button id="button-minimize" style="background-color: yellow">-</button>
+      <button id="button-maximize" style="background-color: green">[]</button>
+    </div>
 
-    <script>
-      const button1 = document.querySelector("#button1");
-      button1.addEventListener("click", () => {
-        window.electronAPI.setActiveView("view1");
-      });
+    <div id="tabs-container"></div>
 
-      const button2 = document.querySelector("#button2");
-      button2.addEventListener("click", () => {
-        window.electronAPI.setActiveView("view2");
-      });
-    </script>
+    <button id="button-plus">+</button>
+
+    <script type="module" src="/src/renderer.ts"></script>
   </body>
 </html>

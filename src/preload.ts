@@ -3,14 +3,15 @@
 
 import { ipcRenderer, contextBridge } from "electron";
 
-// Here we expose the ipcRenderer and ipcMain to the window object
-// so we can use it in the web app.
-// window.electronAPI = {
-//   setActiveView: (viewId: string) =>
-//     ipcRenderer.send("set-active-view", viewId),
-// };
-
 contextBridge.exposeInMainWorld("electronAPI", {
-  setActiveView: (viewId: string) =>
-    ipcRenderer.send("set-active-view", viewId),
+  setActiveView: (viewIndex: string) =>
+    ipcRenderer.send("set-active-view", viewIndex),
+  createNewView: (url?: string) => ipcRenderer.send("create-new-view", url),
+  performWindowAction: (action: "close" | "minimize" | "maximize") =>
+    ipcRenderer.send("perform-window-action", action),
+
+  onTitleChange: (callback: CallableFunction) =>
+    ipcRenderer.on("title-change", (_, ...args) => callback(...args)),
+  onNewViewCreated: (callback: CallableFunction) =>
+    ipcRenderer.on("new-view-created", (_, ...args) => callback(...args)),
 });
