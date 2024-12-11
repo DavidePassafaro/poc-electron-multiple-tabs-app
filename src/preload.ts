@@ -6,6 +6,8 @@ import { ipcRenderer, contextBridge } from "electron";
 contextBridge.exposeInMainWorld("electronAPI", {
   setActiveView: (viewIndex: string) =>
     ipcRenderer.send("set-active-view", viewIndex),
+  destroyView: (viewIndex: number) =>
+    ipcRenderer.send("destroy-view", viewIndex),
   createNewView: (url?: string) => ipcRenderer.send("create-new-view", url),
   performWindowAction: (action: "close" | "minimize" | "maximize") =>
     ipcRenderer.send("perform-window-action", action),

@@ -8,3 +8,8 @@ body {
 button {
   -webkit-app-region: no-drag;
 }
+
+.d-flex {
+  display: flex;
+  gap: 10px;
+}

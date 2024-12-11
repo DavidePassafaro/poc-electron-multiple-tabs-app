@@ -55,7 +55,6 @@ const createNewView = (url?: string) => {
 
   view.webContents.on("page-title-updated", (_, title) => {
     frameMenu.webContents.send("title-change", viewIndex, title);
-    console.log(viewIndex, title);
   });
 
   resizeWindowViews();
@@ -82,13 +81,23 @@ const resizeWindowViews = () => {
   });
 };
 
-ipcMain.on(
-  "set-active-view",
-  (event: Electron.IpcMainEvent, viewIndex: number) => {
+ipcMain.on("set-active-view", (_: Electron.IpcMainEvent, viewIndex: number) => {
+  activeViewIndex = viewIndex;
+  resizeWindowViews();
+});
+
+ipcMain.on("destroy-view", (_: Electron.IpcMainEvent, viewIndex: number) => {
+  win.contentView.removeChildView(win.contentView.children[viewIndex]);
+
+  if (activeViewIndex === viewIndex) {
+    const newActiveView = viewIndex - 1 < 1 ? 1 : viewIndex - 1;
+    activeViewIndex = newActiveView;
+  } else {
     activeViewIndex = viewIndex;
-    resizeWindowViews();
   }
-);
+
+  resizeWindowViews();
+});
 
 ipcMain.on(
   "perform-window-action",

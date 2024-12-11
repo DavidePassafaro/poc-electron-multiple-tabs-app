@@ -13,9 +13,16 @@
       <button id="button-maximize" style="background-color: green">[]</button>
     </div>
 
-    <div id="tabs-container"></div>
+    <div id="tabs-container" class="d-flex"></div>
 
     <button id="button-plus">+</button>
+
+    <template id="tab-button-template">
+      <div id="tab-element">
+        <button id="tab-button" class="tab-button">Loading...</button>
+        <button id="tab-button-close" class="tab-button-close">x</button>
+      </div>
+    </template>
 
     <script type="module" src="/src/renderer.ts"></script>
   </body>
