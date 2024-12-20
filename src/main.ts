@@ -1,5 +1,4 @@
-import { app, BrowserWindow, WebContentsView } from "electron";
-import { ipcMain } from "electron";
+import { app, BrowserWindow, WebContentsView, ipcMain } from "electron";
 import * as path from "path";
 
 const HEADER_HEIGHT = 40;
@@ -110,11 +109,7 @@ ipcMain.on(
         win.minimize();
         break;
       case "maximize":
-        if (win.isMaximized()) {
-          win.unmaximize();
-        } else {
-          win.maximize();
-        }
+        win.setFullScreen(!win.isFullScreen());
         break;
     }
   }
